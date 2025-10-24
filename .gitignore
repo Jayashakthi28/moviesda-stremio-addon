@@ -1,0 +1,58 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Next.js
+.next/
+out/
+build/
+dist/
+
+# Python (keep scripts but ignore venv and cache)
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+*.so
+.Python
+
+# Environment
+.env
+.env.local
+.env*.local
+
+# Database & Results (keep main DB files for deployment)
+search_result_*.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Config (may contain API keys)
+config.py
+
+# Vercel
+.vercel
+
+# Keep these files for the Next.js app:
+# - moviesda_full_db_with_imdb.json (main database)
+# - package.json
+# - package-lock.json
+# - All files in pages/, lib/, public/
+# - next.config.js
+# - vercel.json
+# - scraper/ folder (Python scripts for reference)
+
