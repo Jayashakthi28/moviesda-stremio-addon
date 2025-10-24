@@ -1,19 +1,12 @@
 {
-  "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/manifest.json",
-      "dest": "/api/manifest.json"
+      "source": "/manifest.json",
+      "destination": "/api/manifest.json"
     },
     {
-      "src": "/stream/(.*)",
-      "dest": "/api/stream/$1"
+      "source": "/stream/:path*",
+      "destination": "/api/stream/:path*"
     }
   ],
   "headers": [
