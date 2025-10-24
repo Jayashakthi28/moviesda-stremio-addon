@@ -1,10 +1,18 @@
 import Head from 'next/head';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
     const [copied, setCopied] = useState(false);
+    const [manifestUrl, setManifestUrl] = useState('');
 
-    const manifestUrl = "http://127.0.0.1:3000/api/manifest.json";
+    useEffect(() => {
+        // Get the current domain on client side
+        if (typeof window !== 'undefined') {
+            const baseUrl = `${window.location.protocol}//${window.location.host}`;
+            setManifestUrl(`${baseUrl}/api/manifest.json`);
+        }
+    }, []);
+
     const handleCopy = () => {
         navigator.clipboard.writeText(manifestUrl);
         setCopied(true);
@@ -31,9 +39,9 @@ export default function Home() {
                 <div className="card">
                     <h2>Installation URL</h2>
                     <div className="url-box">
-                        <code>{manifestUrl}</code>
+                        <code>{manifestUrl || 'Loading...'}</code>
                     </div>
-                    <button onClick={handleCopy} className="copy-btn">
+                    <button onClick={handleCopy} className="copy-btn" disabled={!manifestUrl}>
                         {copied ? '✓ Copied!' : '📋 Copy URL'}
                     </button>
                 </div>
@@ -148,6 +156,16 @@ export default function Home() {
           background: #5568d3;
           transform: translateY(-2px);
           box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .copy-btn:disabled {
+          background: #ccc;
+          cursor: not-allowed;
+        }
+
+        .copy-btn:disabled:hover {
+          transform: none;
+          box-shadow: none;
         }
 
         .instructions, .features {
