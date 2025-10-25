@@ -2,79 +2,110 @@ import Head from 'next/head';
 import { useState, useEffect } from 'react';
 
 export default function Home() {
-    const [copied, setCopied] = useState(false);
-    const [manifestUrl, setManifestUrl] = useState('');
+  const [copied, setCopied] = useState(false);
+  const [manifestUrl, setManifestUrl] = useState('');
 
-    useEffect(() => {
-        // Get the current domain on client side
-        if (typeof window !== 'undefined') {
-            const baseUrl = `${window.location.protocol}//${window.location.host}`;
-            setManifestUrl(`${baseUrl}/api/manifest.json`);
-        }
-    }, []);
+  useEffect(() => {
+    // Get the current domain on client side
+    if (typeof window !== 'undefined') {
+      const baseUrl = `${window.location.protocol}//${window.location.host}`;
+      setManifestUrl(`${baseUrl}/api/manifest.json`);
+    }
+  }, []);
 
-    const handleCopy = () => {
-        navigator.clipboard.writeText(manifestUrl);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-    };
+  const handleCopy = () => {
+    navigator.clipboard.writeText(manifestUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
-    return (
-        <div className="container">
-            <Head>
-                <title>MoviesDA Stremio Addon</title>
-                <meta name="description" content="Stremio addon for Tamil movies" />
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
+  const handleInstallInStremio = () => {
+    if (manifestUrl) {
+      // Construct Stremio install URL
+      const stremioInstallUrl = `stremio://${manifestUrl.replace(/^https?:\/\//, '')}`;
+      window.location.href = stremioInstallUrl;
+    }
+  };
 
-            <main className="main">
-                <h1 className="title">
-                    🎬 MoviesDA Stremio Addon
-                </h1>
+  return (
+    <div className="container">
+      <Head>
+        <title>MoviesDA by JSV - Stremio Addon</title>
+        <meta name="description" content="Stream Tamil movies from Moviesda website" />
+        <link rel="icon" href="https://media.tenor.com/6AdlfWdtvAEAAAAM/singamuthu-laugh.gif" />
+      </Head>
 
-                <p className="description">
-                    Stream Tamil movies from MoviesDA database
-                </p>
+      <main className="main">
+        <div className="logo-container">
+          <img src="https://media.tenor.com/6AdlfWdtvAEAAAAM/singamuthu-laugh.gif" alt="MoviesDA Logo" className="logo" />
+        </div>
 
-                <div className="card">
-                    <h2>Installation URL</h2>
-                    <div className="url-box">
-                        <code>{manifestUrl || 'Loading...'}</code>
-                    </div>
-                    <button onClick={handleCopy} className="copy-btn" disabled={!manifestUrl}>
-                        {copied ? '✓ Copied!' : '📋 Copy URL'}
-                    </button>
-                </div>
+        <h1 className="title">
+          MoviesDA by JSV
+        </h1>
 
-                <div className="instructions">
-                    <h3>How to Install:</h3>
-                    <ol>
-                        <li>Copy the installation URL above</li>
-                        <li>Open Stremio and click the <strong>Addons</strong> button (puzzle icon)</li>
-                        <li>Click <strong>Community Addons</strong> at the top</li>
-                        <li>Paste the URL in the search box</li>
-                        <li>Click <strong>Install</strong></li>
-                    </ol>
-                </div>
+        <p className="description">
+          Stream Tamil movies from Moviesda website
+        </p>
 
-                <div className="features">
-                    <h3>Features:</h3>
-                    <ul>
-                        <li>✅ Automatic IMDb title matching</li>
-                        <li>✅ 5000+ Tamil movies database</li>
-                        <li>✅ Multiple stream sources</li>
-                        <li>✅ Quality detection (1080p, 720p, etc.)</li>
-                        <li>✅ Works with any IMDb ID</li>
-                    </ul>
-                </div>
+        <div className="card">
+          <h2>Quick Install</h2>
+          <button onClick={handleInstallInStremio} className="install-btn" disabled={!manifestUrl}>
+            🚀 Install in Stremio
+          </button>
+          <p className="or-divider">or</p>
+          <h2>Manual Installation</h2>
+          <div className="url-box">
+            <code>{manifestUrl || 'Loading...'}</code>
+          </div>
+          <button onClick={handleCopy} className="copy-btn" disabled={!manifestUrl}>
+            {copied ? '✓ Copied!' : '📋 Copy URL'}
+          </button>
+        </div>
 
-                <div className="links">
-                    <a href="/api/manifest.json" target="_blank">View Manifest</a>
-                    <a href="https://www.stremio.com" target="_blank">Download Stremio</a>
-                </div>
-            </main>
+        <div className="instructions">
+          <h3>How to Install:</h3>
+          <div className="install-methods">
+            <div className="method">
+              <h4>🚀 Quick Install (Recommended)</h4>
+              <ol>
+                <li>Make sure Stremio is installed on your device</li>
+                <li>Click the <strong>"Install in Stremio"</strong> button above</li>
+                <li>Stremio will open with the addon installation prompt</li>
+                <li>Click <strong>Install</strong> to add the addon</li>
+              </ol>
+            </div>
+            <div className="method">
+              <h4>📋 Manual Install</h4>
+              <ol>
+                <li>Copy the installation URL above</li>
+                <li>Open Stremio and click the <strong>Addons</strong> button (puzzle icon)</li>
+                <li>Click <strong>Community Addons</strong> at the top</li>
+                <li>Paste the URL in the search box</li>
+                <li>Click <strong>Install</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
 
-            <style jsx>{`
+        <div className="features">
+          <h3>Features:</h3>
+          <ul>
+            <li>✅ Automatic IMDb title matching</li>
+            <li>✅ 5000+ Tamil movies database</li>
+            <li>✅ Multiple stream sources</li>
+            <li>✅ Quality detection (1080p, 720p, etc.)</li>
+            <li>✅ Works with any IMDb ID</li>
+          </ul>
+        </div>
+
+        <div className="links">
+          <a href="/api/manifest.json" target="_blank">View Manifest</a>
+          <a href="https://www.stremio.com" target="_blank">Download Stremio</a>
+        </div>
+      </main>
+
+      <style jsx>{`
         .container {
           min-height: 100vh;
           padding: 0 0.5rem;
@@ -93,6 +124,19 @@ export default function Home() {
           justify-content: center;
           align-items: center;
           max-width: 800px;
+        }
+
+        .logo-container {
+          margin-bottom: 2rem;
+        }
+
+        .logo {
+          width: 150px;
+          height: 150px;
+          border-radius: 50%;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+          border: 5px solid rgba(255, 255, 255, 0.3);
+          object-fit: cover;
         }
 
         .title {
@@ -124,6 +168,66 @@ export default function Home() {
         .card h2 {
           margin-top: 0;
           color: #333;
+          font-size: 1.3rem;
+        }
+
+        .card h2:not(:first-child) {
+          margin-top: 1.5rem;
+        }
+
+        .install-btn {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          border: none;
+          padding: 1rem 2rem;
+          border-radius: 8px;
+          cursor: pointer;
+          font-size: 1.2rem;
+          font-weight: 700;
+          transition: all 0.3s ease;
+          width: 100%;
+          box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .install-btn:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .install-btn:disabled {
+          background: #ccc;
+          cursor: not-allowed;
+          box-shadow: none;
+        }
+
+        .install-btn:disabled:hover {
+          transform: none;
+        }
+
+        .or-divider {
+          text-align: center;
+          color: #999;
+          margin: 1.5rem 0;
+          font-weight: 500;
+          position: relative;
+        }
+
+        .or-divider::before,
+        .or-divider::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          width: 40%;
+          height: 1px;
+          background: #ddd;
+        }
+
+        .or-divider::before {
+          left: 0;
+        }
+
+        .or-divider::after {
+          right: 0;
         }
 
         .url-box {
@@ -182,10 +286,30 @@ export default function Home() {
           color: #333;
         }
 
+        .install-methods {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+          margin-top: 1.5rem;
+        }
+
+        .method h4 {
+          color: #667eea;
+          margin-top: 0;
+          margin-bottom: 1rem;
+        }
+
         .instructions ol, .features ul {
           text-align: left;
           line-height: 2;
           color: #555;
+        }
+
+        @media (max-width: 768px) {
+          .install-methods {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+          }
         }
 
         .links {
@@ -210,6 +334,10 @@ export default function Home() {
         }
 
         @media (max-width: 600px) {
+          .logo {
+            width: 100px;
+            height: 100px;
+          }
           .title {
             font-size: 2.5rem;
           }
@@ -222,7 +350,7 @@ export default function Home() {
         }
       `}</style>
 
-            <style jsx global>{`
+      <style jsx global>{`
         html,
         body {
           padding: 0;
@@ -236,7 +364,7 @@ export default function Home() {
           box-sizing: border-box;
         }
       `}</style>
-        </div>
-    );
+    </div>
+  );
 }
 
