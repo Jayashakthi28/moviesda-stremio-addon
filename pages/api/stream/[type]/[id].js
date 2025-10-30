@@ -6,6 +6,19 @@
 
 const { findMovieInDB, scrapeAllStreams } = require('../../../../lib/search');
 
+
+const getReadyStreams = (movieData) => {
+    return movieData?.ready_streams.map(link => ({
+            url: link,
+            name: `MoviesDA⚡️\n\n[Tamil]`,
+            description: `${movieData.title}\n\n📦 Self hosted stream`,
+            title: movieData.title,
+            behaviorHints: {
+                filename: movieData.title,
+            }
+        }));
+}
+
 export default async function handler(req, res) {
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -46,9 +59,13 @@ export default async function handler(req, res) {
 
         const streams = await scrapeAllStreams(movieData.download_links);
 
-        console.log(`📺 Returning ${streams.length} stream(s)`);
+        const readyStreams = getReadyStreams(movieData);
 
-        return res.status(200).json({ streams: streams });
+        const allStreams = [...readyStreams, ...streams];
+
+        console.log(`📺 Returning ${allStreams.length} stream(s)`);
+
+        return res.status(200).json({ streams: allStreams });
 
     } catch (error) {
         console.error(`❌ Error in stream handler: ${error.message}`);
