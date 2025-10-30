@@ -8,6 +8,7 @@ const { findMovieInDB, scrapeAllStreams } = require('../../../../lib/search');
 
 
 const getReadyStreams = (movieData) => {
+    if(!movieData.ready_streams) return [];
     return movieData?.ready_streams.map(link => ({
             url: link,
             name: `MoviesDA⚡️\n\n[Tamil]`,
