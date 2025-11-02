@@ -4,21 +4,8 @@
  * Format: /api/stream/movie/tt1234567.json
  */
 
-const { findMovieInDB, scrapeAllStreams } = require('../../../../lib/search');
+const { findMovieInDB, scrapeAllStreams, getReadyStreams } = require('../../../../lib/search');
 
-
-const getReadyStreams = (movieData) => {
-    if(!movieData.ready_streams) return [];
-    return movieData?.ready_streams.map(link => ({
-            url: link,
-            name: `MoviesDA⚡️\n\n[Tamil]`,
-            description: `${movieData.title}\n\n📦 Self hosted stream`,
-            title: movieData.title,
-            behaviorHints: {
-                filename: movieData.title,
-            }
-        }));
-}
 
 export default async function handler(req, res) {
     // Set CORS headers
@@ -60,7 +47,7 @@ export default async function handler(req, res) {
 
         const streams = await scrapeAllStreams(movieData.download_links);
 
-        const readyStreams = getReadyStreams(movieData);
+        const readyStreams = await getReadyStreams(movieData);
 
         const allStreams = [...readyStreams, ...streams];
 
